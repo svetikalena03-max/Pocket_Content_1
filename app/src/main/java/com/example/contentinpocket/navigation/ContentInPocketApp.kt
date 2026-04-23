@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.contentinpocket.ui.ContentViewModel
 import com.example.contentinpocket.ui.screen.FavoritesScreen
 import com.example.contentinpocket.ui.screen.FormatSelectionScreen
@@ -36,14 +38,23 @@ fun ContentInPocketApp(
             NicheSelectionScreen(
                 niches = state.niches,
                 selectedNicheId = state.selectedNiche?.id,
-                onNicheClick = { nicheId -> viewModel.selectNiche(nicheId) },
-                onContinueClick = { navController.navigate(AppDestination.FormatSelection.route) },
+                onNicheClick = { nicheId ->
+                    viewModel.selectNiche(nicheId)
+                    navController.navigate(AppDestination.FormatSelection.createRoute(nicheId))
+                },
                 onBackClick = { navController.popBackStack() },
                 onFavoritesClick = { navController.navigate(AppDestination.Favorites.route) }
             )
         }
 
-        composable(AppDestination.FormatSelection.route) {
+        composable(
+            route = AppDestination.FormatSelection.route,
+            arguments = listOf(navArgument("nicheId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val nicheId = backStackEntry.arguments?.getString("nicheId").orEmpty()
+            if (state.selectedNiche?.id != nicheId && nicheId.isNotBlank()) {
+                viewModel.selectNiche(nicheId)
+            }
             FormatSelectionScreen(
                 formats = state.formats,
                 selectedFormatId = state.selectedFormat?.id,
