@@ -13,6 +13,10 @@ class ContentRepository {
         return MockData.templates.filter { it.niche == nicheId && it.format == formatId }
     }
 
+    fun getTemplate(nicheId: String, formatId: String): ContentTemplate? {
+        return MockData.templates.firstOrNull { it.niche == nicheId && it.format == formatId }
+    }
+
     fun getFavoriteTemplates(ids: Set<String>): List<ContentTemplate> {
         return MockData.templates.filter { it.id in ids }
     }

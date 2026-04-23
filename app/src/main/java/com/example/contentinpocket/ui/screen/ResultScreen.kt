@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
@@ -34,7 +32,7 @@ import com.example.contentinpocket.domain.ContentTemplate
 fun ResultScreen(
     selectedNiche: String,
     selectedFormat: String,
-    templates: List<ContentTemplate>,
+    template: ContentTemplate?,
     isFavorite: (String) -> Boolean,
     onToggleFavorite: (ContentTemplate) -> Unit,
     onBackClick: () -> Unit,
@@ -60,43 +58,37 @@ fun ResultScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (templates.isEmpty()) {
-            EmptyStateCard(text = "Шаблоны не найдены. Выберите другой формат или нишу.")
+        if (template == null) {
+            EmptyStateCard(text = "Для выбранной ниши и формата пока нет шаблона. Попробуйте другой вариант.")
         } else {
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+            Card(
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                items(templates) { template ->
-                    Card(
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(text = template.text, style = MaterialTheme.typography.bodyLarge)
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(text = template.text, style = MaterialTheme.typography.bodyLarge)
-                            Spacer(modifier = Modifier.height(14.dp))
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                OutlinedButton(
-                                    onClick = {
-                                        clipboardManager.setText(AnnotatedString(template.text))
-                                        Toast.makeText(context, "Текст скопирован", Toast.LENGTH_SHORT).show()
-                                    }
-                                ) {
-                                    Text("Скопировать")
-                                }
-
-                                IconButton(onClick = { onToggleFavorite(template) }) {
-                                    Icon(
-                                        imageVector = if (isFavorite(template.id)) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                                        contentDescription = "Добавить в избранное",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
-                                }
+                        OutlinedButton(
+                            onClick = {
+                                clipboardManager.setText(AnnotatedString(template.text))
+                                Toast.makeText(context, "Текст скопирован", Toast.LENGTH_SHORT).show()
                             }
+                        ) {
+                            Text("Скопировать")
+                        }
+
+                        IconButton(onClick = { onToggleFavorite(template) }) {
+                            Icon(
+                                imageVector = if (isFavorite(template.id)) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                                contentDescription = "Добавить в избранное",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
                         }
                     }
                 }

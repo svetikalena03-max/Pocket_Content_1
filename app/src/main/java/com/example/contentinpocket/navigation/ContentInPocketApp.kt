@@ -85,7 +85,7 @@ fun ContentInPocketApp(
             ResultScreen(
                 selectedNiche = state.selectedNiche?.title.orEmpty(),
                 selectedFormat = state.selectedFormat?.title.orEmpty(),
-                templates = state.templates,
+                template = state.selectedTemplate,
                 isFavorite = { id -> viewModel.isFavorite(id) },
                 onToggleFavorite = { template -> viewModel.toggleFavorite(template) },
                 onBackClick = { navController.popBackStack() },

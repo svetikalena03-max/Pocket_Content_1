@@ -15,7 +15,7 @@ data class ContentUiState(
     val formats: List<ContentFormat> = emptyList(),
     val selectedNiche: ContentNiche? = null,
     val selectedFormat: ContentFormat? = null,
-    val templates: List<ContentTemplate> = emptyList(),
+    val selectedTemplate: ContentTemplate? = null,
     val favorites: List<ContentTemplate> = emptyList()
 )
 
@@ -39,7 +39,7 @@ class ContentViewModel(
             state.copy(
                 selectedNiche = niche,
                 selectedFormat = null,
-                templates = emptyList()
+                selectedTemplate = null
             )
         }
     }
@@ -47,16 +47,16 @@ class ContentViewModel(
     fun selectFormat(formatId: String) {
         val format = repository.getFormatById(formatId)
         val nicheId = _uiState.value.selectedNiche?.id.orEmpty()
-        val templates = if (nicheId.isNotBlank() && format != null) {
-            repository.getTemplates(nicheId, format.id)
+        val template = if (nicheId.isNotBlank() && format != null) {
+            repository.getTemplate(nicheId, format.id)
         } else {
-            emptyList()
+            null
         }
 
         _uiState.update { state ->
             state.copy(
                 selectedFormat = format,
-                templates = templates
+                selectedTemplate = template
             )
         }
     }
