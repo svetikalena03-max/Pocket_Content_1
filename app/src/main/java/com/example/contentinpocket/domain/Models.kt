@@ -1,6 +1,6 @@
 ﻿package com.example.contentinpocket.domain
 
-data class Niche(
+data class ContentNiche(
     val id: String,
     val title: String
 )
@@ -12,7 +12,7 @@ data class ContentFormat(
 
 data class ContentTemplate(
     val id: String,
-    val nicheId: String,
-    val formatId: String,
+    val niche: String,
+    val format: String,
     val text: String
 )

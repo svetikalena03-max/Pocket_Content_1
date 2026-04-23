@@ -3,17 +3,17 @@
 import androidx.lifecycle.ViewModel
 import com.example.contentinpocket.data.ContentRepository
 import com.example.contentinpocket.domain.ContentFormat
+import com.example.contentinpocket.domain.ContentNiche
 import com.example.contentinpocket.domain.ContentTemplate
-import com.example.contentinpocket.domain.Niche
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 data class ContentUiState(
-    val niches: List<Niche> = emptyList(),
+    val niches: List<ContentNiche> = emptyList(),
     val formats: List<ContentFormat> = emptyList(),
-    val selectedNiche: Niche? = null,
+    val selectedNiche: ContentNiche? = null,
     val selectedFormat: ContentFormat? = null,
     val templates: List<ContentTemplate> = emptyList(),
     val favorites: List<ContentTemplate> = emptyList()

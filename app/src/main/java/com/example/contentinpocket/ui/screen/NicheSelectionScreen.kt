@@ -16,11 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.contentinpocket.domain.Niche
+import com.example.contentinpocket.domain.ContentNiche
 
 @Composable
 fun NicheSelectionScreen(
-    niches: List<Niche>,
+    niches: List<ContentNiche>,
     selectedNicheId: String?,
     onNicheClick: (String) -> Unit,
     onContinueClick: () -> Unit,
