@@ -6,6 +6,8 @@ sealed class AppDestination(val route: String) {
     data object FormatSelection : AppDestination("format_selection/{nicheId}") {
         fun createRoute(nicheId: String): String = "format_selection/$nicheId"
     }
-    data object Result : AppDestination("result")
+    data object Result : AppDestination("result/{nicheId}/{formatId}") {
+        fun createRoute(nicheId: String, formatId: String): String = "result/$nicheId/$formatId"
+    }
     data object Favorites : AppDestination("favorites")
 }

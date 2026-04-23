@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -21,10 +20,8 @@ import com.example.contentinpocket.domain.ContentFormat
 @Composable
 fun FormatSelectionScreen(
     formats: List<ContentFormat>,
-    selectedFormatId: String?,
     selectedNicheName: String,
-    onFormatClick: (String) -> Unit,
-    onContinueClick: () -> Unit,
+    onFormatSelected: (String) -> Unit,
     onBackClick: () -> Unit,
     onFavoritesClick: () -> Unit
 ) {
@@ -56,25 +53,13 @@ fun FormatSelectionScreen(
             items(formats) { format ->
                 SelectableCard(
                     title = format.title,
-                    selected = format.id == selectedFormatId,
-                    onClick = { onFormatClick(format.id) }
+                    selected = false,
+                    onClick = { onFormatSelected(format.id) }
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
-
-        Button(
-            onClick = onContinueClick,
-            enabled = selectedFormatId != null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(52.dp)
-        ) {
-            Text(text = "Показать шаблоны")
-        }
-
-        Spacer(modifier = Modifier.height(10.dp))
 
         OutlinedButton(
             onClick = onBackClick,

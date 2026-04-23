@@ -57,16 +57,31 @@ fun ContentInPocketApp(
             }
             FormatSelectionScreen(
                 formats = state.formats,
-                selectedFormatId = state.selectedFormat?.id,
                 selectedNicheName = state.selectedNiche?.title.orEmpty(),
-                onFormatClick = { formatId -> viewModel.selectFormat(formatId) },
-                onContinueClick = { navController.navigate(AppDestination.Result.route) },
+                onFormatSelected = { formatId ->
+                    viewModel.selectFormat(formatId)
+                    navController.navigate(AppDestination.Result.createRoute(nicheId, formatId))
+                },
                 onBackClick = { navController.popBackStack() },
                 onFavoritesClick = { navController.navigate(AppDestination.Favorites.route) }
             )
         }
 
-        composable(AppDestination.Result.route) {
+        composable(
+            route = AppDestination.Result.route,
+            arguments = listOf(
+                navArgument("nicheId") { type = NavType.StringType },
+                navArgument("formatId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val nicheId = backStackEntry.arguments?.getString("nicheId").orEmpty()
+            val formatId = backStackEntry.arguments?.getString("formatId").orEmpty()
+            if (state.selectedNiche?.id != nicheId && nicheId.isNotBlank()) {
+                viewModel.selectNiche(nicheId)
+            }
+            if (state.selectedFormat?.id != formatId && formatId.isNotBlank()) {
+                viewModel.selectFormat(formatId)
+            }
             ResultScreen(
                 selectedNiche = state.selectedNiche?.title.orEmpty(),
                 selectedFormat = state.selectedFormat?.title.orEmpty(),
